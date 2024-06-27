@@ -1,0 +1,2 @@
+(()=>{"use strict";const e=new class{createBoard(){const e={};for(let o=0;o<10;o++)for(let r=0;r<10;r++)e[[o,r]]=null;return e}placeShip(){}};console.log(e.createBoard())})();
+//# sourceMappingURL=app.bundle.js.map
