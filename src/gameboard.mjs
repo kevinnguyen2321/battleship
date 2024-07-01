@@ -65,40 +65,6 @@ export class Gameboard {
         });
         this.listOfShips[shipType.name] = shipType;
       }
-      //Placing ships horizontally//
-      // if (direction === 'horizontal') {
-      //   const placementArr = [];
-      //   let placementToIntegerArr;
-      //   for (let i = 0; i < length; i++) {
-      //     const coordinates = `${x},${yValue}`;
-      //     yValue++;
-      //     placementArr.push(coordinates);
-      //     placementToIntegerArr = placementArr.map((coord) => {
-      //       return coord.split(',').map(Number);
-      //     });
-      //   }
-      //   const allHorizCoordsInbound = this.isAllCoordsInbound(
-      //     placementToIntegerArr
-      //   );
-      //   const allHorizCoordsEmpty = this.isAllCoordsEmpty(placementArr);
-      //   if (allHorizCoordsEmpty && allHorizCoordsInbound) {
-      //     placementArr.forEach((coord) => {
-      //       this.gameBoard.set(coord, [shipType]);
-      //     });
-      //   }
-
-      //   //Placing ships vertically//
-      // } else if (direction === 'vertical') {
-      //   const placementArr = [];
-      //   let placementToIntArr;
-      //   for (let i = 0; i < length; i++) {
-      //     const coordinates = `${xValue},${y}`;
-      //     xValue++;
-      //     placementArr.push(coordinates);
-      //     placementToIntArr = placementArr.map((coord) => {
-      //       return coord.split(',').map(Number);
-      //     });
-      //   }
     }
   }
 
@@ -117,6 +83,7 @@ export class Gameboard {
       this.gameBoard.set(coordinates, value);
       this.sendHitToShip(coordinates);
       const allShipsSunk = this.areAllShipsSunk(this.listOfShips);
+      //If all ships are sunk report that all ships sank//
       if (allShipsSunk) {
         console.log('All ships are sunk!');
       }
