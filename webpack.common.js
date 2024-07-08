@@ -1,6 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin'); // Add this line
-
+console.log('Loading webpack.common.js');
 module.exports = {
   entry: {
     app: './src/index.js',

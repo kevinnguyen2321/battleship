@@ -17,3 +17,14 @@ export function createElement(element) {
 export function addClass(element, selector) {
   element.classList.add(selector);
 }
+
+//Function to iterate keys of gameBoard//
+export function checkForTruthyKeys(map) {
+  const occupiedDomBoards = [];
+  for (let [key, value] of map.entries()) {
+    if (value) {
+      occupiedDomBoards.push(key);
+    }
+  }
+  return occupiedDomBoards;
+}
