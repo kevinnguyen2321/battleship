@@ -26,12 +26,12 @@ body {
 
 .content-container {
   display: flex;
+  flex-direction: column;
   border: solid pink;
   height: 100vh;
   width: 99%;
   margin-top: 25px;
   justify-content: center;
-  gap: 75px;
 }
 
 .ship-container {
@@ -69,19 +69,51 @@ body {
   height: 100%;
 }
 
-.row:hover {
-  background-color: black;
+.hover {
+  background-color: green;
 }
 
 .clicked {
   background-color: blue;
 }
 
+.error {
+  background-color: red;
+}
+
 .highlight {
   background-color: yellow;
+}
+
+.random-highlight {
+  background-color: green;
 }
 
 button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+.board-ship-container {
+  border: solid green;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 100px;
+}
+
+.start-container {
+  border: solid black;
+  margin-top: 15px;
+  width: 40%;
+  height: 10%;
+  align-self: center;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.start-container button {
+  width: 5rem;
+  height: 2.2rem;
 }

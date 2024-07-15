@@ -40,7 +40,10 @@ export class Gameboard {
   placeShip(shipType, [x, y], length, direction) {
     let xValue = x;
     let yValue = y;
-    if (this.isInbound([x, y])) {
+    if (
+      this.isInbound([x, y]) &&
+      this.noShipDuplicates(shipType.name, shipType.length)
+    ) {
       const placementArr = [];
       let placementToIntegerArr;
       let coordinates;
@@ -59,6 +62,7 @@ export class Gameboard {
       }
       const allCoordsInbound = this.isAllCoordsInbound(placementToIntegerArr);
       const allCoordsEmpty = this.isAllCoordsEmpty(placementArr);
+
       if (allCoordsInbound && allCoordsEmpty) {
         placementArr.forEach((coord) => {
           this.gameBoard.set(coord, [shipType]);
@@ -66,6 +70,33 @@ export class Gameboard {
         this.listOfShips[shipType.name] = shipType;
       }
     }
+    // if (this.isInbound([x, y])) {
+    //   const placementArr = [];
+    //   let placementToIntegerArr;
+    //   let coordinates;
+    //   for (let i = 0; i < length; i++) {
+    //     if (direction === 'horizontal') {
+    //       coordinates = `${x},${yValue}`;
+    //       yValue++;
+    //     } else if (direction === 'vertical') {
+    //       coordinates = `${xValue},${y}`;
+    //       xValue++;
+    //     }
+    //     placementArr.push(coordinates);
+    //     placementToIntegerArr = placementArr.map((coord) => {
+    //       return coord.split(',').map(Number);
+    //     });
+    //   }
+    //   const allCoordsInbound = this.isAllCoordsInbound(placementToIntegerArr);
+    //   const allCoordsEmpty = this.isAllCoordsEmpty(placementArr);
+
+    //   if (allCoordsInbound && allCoordsEmpty) {
+    //     placementArr.forEach((coord) => {
+    //       this.gameBoard.set(coord, [shipType]);
+    //     });
+    //     this.listOfShips[shipType.name] = shipType;
+    //   }
+    // }
   }
 
   //Keeping track of missed attacks//
@@ -116,5 +147,16 @@ export class Gameboard {
     } else {
       return false;
     }
+  }
+
+  noShipDuplicates(shipType, shipLength) {
+    const gameboardValues = this.gameBoard.values();
+    let count = 0;
+    for (let key of gameboardValues) {
+      if (key && key[0].name === shipType) {
+        count++;
+      }
+    }
+    return count < shipLength;
   }
 }

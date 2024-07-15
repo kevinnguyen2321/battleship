@@ -18,10 +18,19 @@ export function pageLayout() {
   const contentContainer = createElement('div');
   addClass(contentContainer, 'content-container');
   appendIfNotExists(contentContainer, '.content-container', mainContainer);
+  //Container for boards & Ship buttons//
+  const boardAndShipBtnContainer = createElement('div');
+  addClass(boardAndShipBtnContainer, 'board-ship-container');
+  appendIfNotExists(
+    boardAndShipBtnContainer,
+    '.board-ship-container',
+    contentContainer
+  );
   //Ships container//
   const shipContainer = createElement('div');
   addClass(shipContainer, 'ship-container');
-  appendIfNotExists(shipContainer, '.ship-container', contentContainer);
+  // appendIfNotExists(shipContainer, '.ship-container', contentContainer);
+  appendIfNotExists(shipContainer, '.ship-container', boardAndShipBtnContainer);
   //Direction container & buttons//
   const directionContainer = createElement('div');
   addClass(directionContainer, 'direction-container');
@@ -37,35 +46,61 @@ export function pageLayout() {
   // Ship buttons//
   const carrierBtn = createElement('button');
   carrierBtn.textContent = 'Carrier';
+  carrierBtn.setAttribute('id', 5);
   shipContainer.appendChild(carrierBtn);
 
   const battleshipBtn = createElement('button');
   battleshipBtn.textContent = 'Battleship';
+  battleshipBtn.setAttribute('id', 4);
   shipContainer.appendChild(battleshipBtn);
 
   const cruiserBtn = createElement('button');
   cruiserBtn.textContent = 'Cruiser';
+  cruiserBtn.setAttribute('id', 3);
   shipContainer.appendChild(cruiserBtn);
 
   const submarineBtn = createElement('button');
   submarineBtn.textContent = 'Submarine';
+  submarineBtn.setAttribute('id', 3);
   shipContainer.appendChild(submarineBtn);
 
   const destroyerBtn = createElement('button');
   destroyerBtn.textContent = 'Destroyer';
+  destroyerBtn.setAttribute('id', 2);
   shipContainer.appendChild(destroyerBtn);
   // Player board//
   const playerBoard = createElement('div');
   addClass(playerBoard, 'player-board-container');
-  appendIfNotExists(playerBoard, '.player-board-container', contentContainer);
+  //
+  appendIfNotExists(
+    playerBoard,
+    '.player-board-container',
+    boardAndShipBtnContainer
+  );
   //Computer board//
   const computerBoard = createElement('div');
   addClass(computerBoard, 'computer-board-container');
-  appendIfNotExists(
-    computerBoard,
-    '.computer-board-container',
-    contentContainer
-  );
+  // appendIfNotExists(
+  //   computerBoard,
+  //   '.computer-board-container',
+  //   boardAndShipBtnContainer
+  // );
+  // Start game button div container//
+  const startGameContainer = createElement('div');
+  addClass(startGameContainer, 'start-container');
+  appendIfNotExists(startGameContainer, '.start-container', contentContainer);
+  //Random button//
+  const randomBtn = createElement('button');
+  randomBtn.textContent = 'Random';
+  startGameContainer.appendChild(randomBtn);
+  // Start game button//
+  const startGameBtn = createElement('button');
+  startGameBtn.textContent = 'Start game';
+  startGameContainer.appendChild(startGameBtn);
+  // Reset button//
+  const resetBtn = createElement('button');
+  resetBtn.textContent = 'Reset';
+  startGameContainer.appendChild(resetBtn);
   // //Function to create player board//
   createDomGameBoard(playerBoard);
   //Function to create computer board//
@@ -81,6 +116,10 @@ export function pageLayout() {
     cruiserBtn,
     submarineBtn,
     destroyerBtn,
+    startGameBtn,
+    randomBtn,
+    resetBtn,
+    boardAndShipBtnContainer,
   };
 }
 

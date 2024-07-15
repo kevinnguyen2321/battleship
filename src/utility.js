@@ -28,3 +28,12 @@ export function checkForTruthyKeys(map) {
   }
   return occupiedDomBoards;
 }
+
+export function generateRandomCoords() {
+  let x = Math.floor(Math.random() * 10);
+  let y = Math.floor(Math.random() * 10);
+  // console.log(`This is X:${x}`);
+  // console.log(`This is Y: ${y}`);
+  let randomCoors = [x, y];
+  return randomCoors;
+}

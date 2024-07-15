@@ -101,7 +101,7 @@ test('tracking of missed attacks', () => {
 
   expect(board.missedAttacks).toEqual(expectedArray);
 });
-//Testinf for all ships to be sunk//
+//Test for all ships to be sunk//
 test('whether all ships have been sunk', () => {
   const board = new Gameboard();
   const carrier = new Ship('Carrier', 5);
@@ -149,4 +149,38 @@ test('whether all ships have been sunk', () => {
   board.receiveAttack([8, 9]);
 
   expect(board.areAllShipsSunk(expectedList)).toEqual(true);
+});
+
+// Test for only one type of ship to be placed//
+test('for multiple placement of same ship', () => {
+  const board = new Gameboard();
+  const carrier = new Ship('Carrier', 5);
+  const cruiser = new Ship('Cruiser', 3);
+  const submarine = new Ship('Submarine', 3);
+  const destroyer = new Ship('Destroyer', 2);
+  const battleship = new Ship('Battleship', 4);
+
+  const battleshipTwo = new Ship('Battleship', 4);
+
+  const expectedShipState = {
+    name: 'Battleship',
+    length: 4,
+    damageTaken: 0,
+  };
+
+  const expectedShipStateTwo = {
+    name: 'Battleship',
+    length: 4,
+    damageTaken: 0,
+  };
+
+  board.placeShip(battleship, [0, 0], battleship.length, 'vertical');
+
+  board.placeShip(battleshipTwo, [5, 2], battleshipTwo.length, 'horizontal');
+
+  expect(board.gameBoard.get('0,0')).toEqual([
+    expect.objectContaining(expectedShipState),
+  ]);
+
+  expect(board.gameBoard.get('5,2')).toBeNull();
 });
