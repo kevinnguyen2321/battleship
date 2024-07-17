@@ -1,3 +1,6 @@
+import { Ship } from './ships.js';
+import { generateRandomCoords } from './utility.js';
+
 export class Gameboard {
   // Method to initialize game board//
   createBoard() {
@@ -70,37 +73,21 @@ export class Gameboard {
         this.listOfShips[shipType.name] = shipType;
       }
     }
-    // if (this.isInbound([x, y])) {
-    //   const placementArr = [];
-    //   let placementToIntegerArr;
-    //   let coordinates;
-    //   for (let i = 0; i < length; i++) {
-    //     if (direction === 'horizontal') {
-    //       coordinates = `${x},${yValue}`;
-    //       yValue++;
-    //     } else if (direction === 'vertical') {
-    //       coordinates = `${xValue},${y}`;
-    //       xValue++;
-    //     }
-    //     placementArr.push(coordinates);
-    //     placementToIntegerArr = placementArr.map((coord) => {
-    //       return coord.split(',').map(Number);
-    //     });
-    //   }
-    //   const allCoordsInbound = this.isAllCoordsInbound(placementToIntegerArr);
-    //   const allCoordsEmpty = this.isAllCoordsEmpty(placementArr);
+  }
 
-    //   if (allCoordsInbound && allCoordsEmpty) {
-    //     placementArr.forEach((coord) => {
-    //       this.gameBoard.set(coord, [shipType]);
-    //     });
-    //     this.listOfShips[shipType.name] = shipType;
-    //   }
-    // }
+  //Method to reset gameboard//
+  resetBoard() {
+    this.gameBoard = this.createBoard();
+    this.missedAttacks = [];
+    this.hitAttacks = [];
+    this.listOfShips = {};
   }
 
   //Keeping track of missed attacks//
   missedAttacks = [];
+
+  //Keeping track of hit ships coords//
+  hitAttacks = [];
 
   //List of all ships on board//
   listOfShips = {};
@@ -128,8 +115,11 @@ export class Gameboard {
   sendHitToShip(coordinates) {
     let value = this.gameBoard.get(coordinates);
     const hitShips = value.find((item) => item === 'Hit');
-    if (hitShips) {
+    if (value[0] instanceof Ship) {
       value[0].hit();
+      this.hitAttacks.push(coordinates);
+    } else {
+      console.error('Error: Value at coordinates is not a Ship instance');
     }
   }
 
@@ -148,7 +138,7 @@ export class Gameboard {
       return false;
     }
   }
-
+  //Method to check for any duplicates of ship types//
   noShipDuplicates(shipType, shipLength) {
     const gameboardValues = this.gameBoard.values();
     let count = 0;
@@ -159,4 +149,40 @@ export class Gameboard {
     }
     return count < shipLength;
   }
+  //Method to randomly place ships on board//
+  randomlyPlaceShips(ship, coords, length, direction) {
+    const randomShip = generateRandomShip();
+
+    this.placeShip(
+      randomShip,
+      generateRandomCoords(),
+      randomShip.length,
+      generateRandomDirection()
+    );
+  }
+}
+
+//Helper functions//
+function generateRandomShip() {
+  const computerCarrier = new Ship('Carrier', 5);
+  const computerBattleship = new Ship('Battleship', 4);
+  const computerCruiser = new Ship('Cruiser', 3);
+  const computerSubmarine = new Ship('Submarine', 3);
+  const computerDestroyer = new Ship('Destroyer', 2);
+  //Ship array//
+  const computerShipArr = [
+    computerCarrier,
+    computerBattleship,
+    computerCruiser,
+    computerSubmarine,
+    computerDestroyer,
+  ];
+  const randomIndex = Math.floor(Math.random() * 5);
+  return computerShipArr[randomIndex];
+}
+
+function generateRandomDirection() {
+  const directionArr = ['horizontal', 'vertical'];
+  const randomIndex = Math.floor(Math.random() * 2);
+  return directionArr[randomIndex];
 }

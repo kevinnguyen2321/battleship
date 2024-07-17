@@ -22,6 +22,11 @@ export const {
   resetBtn,
   randomBtn,
   boardAndShipBtnContainer,
+  dialog,
+  dialogHeaderText,
+  newGameBtn,
+  instructionsDiv,
+  shipContainer,
 } = pageLayout();
 
 //Player ships//
@@ -60,6 +65,11 @@ playerBoard.addEventListener('click', (e) => {
       displayShip(submarineBtn, playerSubmarine, coords, direction);
       displayShip(destroyerBtn, playerDestroyer, coords, direction);
     }
+    if (horizontalBtn.classList.contains('highlight')) {
+      removeHighlight(horizontalBtn);
+    } else if (verticalBtn.classList.contains('highlight')) {
+      removeHighlight(verticalBtn);
+    }
   }
 });
 
@@ -83,7 +93,52 @@ computerBoard.addEventListener('click', (e) => {
   const clickedElement = e.target;
   if (clickedElement.classList.contains('row')) {
     const coords = clickedElement.id.split('-').map(Number); // Convert '0-0' to [0, 0]
-    console.log('Computer board Coordinates:', coords);
+    if (
+      !clickedElement.classList.contains('hit') &&
+      !clickedElement.classList.contains('missed')
+    ) {
+      console.log('Computer board Coordinates:', coords);
+      const [x, y] = coords;
+      computer.gameBoard.receiveAttack([x, y]);
+      console.log('Computer board below ');
+      console.log(computer.gameBoard);
+      //Add missed class to missed coords for computer//
+      addHitOrMissClass(computer.gameBoard.missedAttacks, 'computer', 'missed');
+      //Add hit class to hit coords for computer//
+      addHitOrMissClass(computer.gameBoard.hitAttacks, 'computer', 'hit');
+      //Generate random attacks for player board//
+      let attacked = false;
+      let randomCoords;
+      const maxAttemps = 100;
+      let attempts = 0;
+      while (!attacked && attempts < maxAttemps) {
+        randomCoords = generateRandomCoords();
+        if (boardNotBeenAttacked(randomCoords, 'player')) {
+          attacked = boardNotBeenAttacked(randomCoords, 'player');
+        }
+        attempts++;
+      }
+      const [a, b] = randomCoords;
+
+      player.gameBoard.receiveAttack([a, b]);
+      console.log('Player board below');
+      console.log(player.gameBoard);
+      //Add missed class for player coords that missed//
+      addHitOrMissClass(player.gameBoard.missedAttacks, 'player', 'missed');
+      //Add hit class for player coords that were hit//
+      addHitOrMissClass(player.gameBoard.hitAttacks, 'player', 'hit');
+    }
+
+    //Alert when all of player's ships are sunk or when computer ships are sunk//
+    if (player.gameBoard.areAllShipsSunk(player.gameBoard.listOfShips)) {
+      dialogHeaderText.textContent = `${computer.name} has won!`;
+      dialog.showModal();
+    } else if (
+      computer.gameBoard.areAllShipsSunk(computer.gameBoard.listOfShips)
+    ) {
+      dialogHeaderText.textContent = `${player.name} has won!`;
+      dialog.showModal();
+    }
   }
 });
 
@@ -199,14 +254,38 @@ startGameBtn.addEventListener('click', (e) => {
     player.gameBoard.listOfShips
   ).length;
   //Check that all player ships are placed before displaying computer board//
-  // Randomly place the computer board//
   if (randomBtn.disabled === true || playerListOfShipsLength === 5) {
+    // Randomly place the computer board//
+    const computerListOfShipsLength = Object.keys(
+      computer.gameBoard.listOfShips
+    ).length;
+    const maxAttempts = 100;
+    let attempts = 0;
+    while (computerListOfShipsLength !== 5 && attempts < maxAttempts) {
+      computer.gameBoard.randomlyPlaceShips();
+      attempts++;
+    }
+    console.log(computerListOfShipsLength);
+    console.log(computer.gameBoard);
+    //Append compute board onto DOM
     appendIfNotExists(
       computerBoard,
       '.computer-board-container',
       boardAndShipBtnContainer
     );
+
+    //Remove instructions div container//
+    boardAndShipBtnContainer.removeChild(instructionsDiv);
   }
+});
+
+resetBtn.addEventListener('click', (e) => {
+  resetGame();
+});
+
+newGameBtn.addEventListener('click', (e) => {
+  resetGame();
+  dialog.close();
 });
 
 //Helper functions//
@@ -350,4 +429,80 @@ function randomShipBtnAndShipClass() {
     ship: playerShipBtnAndClassArr[1],
     direction: randomDirection,
   };
+}
+
+//Function to loop through each missed attacked board and add missed attack class
+function addHitOrMissClass(arr, owner, par) {
+  arr.forEach((coord) => {
+    const coordToId = coord.toString().replace(',', '-');
+    // const board = document.getElementById(coordToId);
+    const board = document.querySelector(
+      `[id='${coordToId}'][data-owner='${owner}']`
+    );
+    if (board) {
+      board.classList.add(par);
+    }
+  });
+}
+
+//Function to check if board has hit or miss class//
+function boardNotBeenAttacked(coords, owner) {
+  const id = coords.toString().replace(',', '-');
+  const board = document.querySelector(`[id='${id}'][data-owner='${owner}']`);
+  if (board.classList.contains('hit') || board.classList.contains('missed')) {
+    console.log('This board has already been attacked');
+    return false;
+  } else {
+    console.log('This board has not been hit');
+    return true;
+  }
+}
+
+//Function to clear dom boards//
+function clearDomBoards(board) {
+  if (board.classList.contains('clicked')) {
+    board.classList.remove('clicked');
+  }
+  if (board.classList.contains('hit')) {
+    board.classList.remove('hit');
+  }
+  if (board.classList.contains('missed')) {
+    board.classList.remove('missed');
+  }
+}
+
+//Function to enable any disabled buttons//
+function enableBtns() {
+  const buttons = document.querySelectorAll('button');
+  buttons.forEach((button) => {
+    if (button.disabled === true) {
+      button.disabled = false;
+    }
+    if (button.classList.contains('random-highlight')) {
+      button.classList.remove('random-highlight');
+    }
+  });
+}
+
+//Function to reset game//
+function resetGame() {
+  //Clear both game boards//
+  player.gameBoard.resetBoard();
+  computer.gameBoard.resetBoard();
+  console.log(player.gameBoard);
+  console.log(computer.gameBoard);
+  //Clear each DOM board if classes are present//
+  const playerBoards = document.querySelectorAll('.row');
+  playerBoards.forEach((board) => {
+    clearDomBoards(board);
+  });
+  //Renable disabled buttons//
+  enableBtns();
+  if (boardAndShipBtnContainer.contains(computerBoard)) {
+    boardAndShipBtnContainer.removeChild(computerBoard);
+  }
+  //Remove highlight class if any buttons has class//
+  removeHighlight(horizontalBtn);
+  removeHighlight(verticalBtn);
+  boardAndShipBtnContainer.insertBefore(instructionsDiv, shipContainer);
 }

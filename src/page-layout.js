@@ -18,6 +18,44 @@ export function pageLayout() {
   const contentContainer = createElement('div');
   addClass(contentContainer, 'content-container');
   appendIfNotExists(contentContainer, '.content-container', mainContainer);
+  //Modal for game finish//
+  const dialog = createElement('dialog');
+  dialog.setAttribute('id', 'game-over');
+  document.body.appendChild(dialog);
+  //Container for dialog element//
+  const dialogDiv = createElement('div');
+  addClass(dialogDiv, 'dialog-div');
+  dialog.appendChild(dialogDiv);
+  //Dialog header container//
+  const dialogHeaderContainer = createElement('div');
+  addClass(dialogHeaderContainer, 'dialog-header-container');
+  dialogDiv.appendChild(dialogHeaderContainer);
+  //Header text//
+  const dialogHeaderText = createElement('h1');
+  addClass(dialogHeaderText, 'dialog-header-text');
+  dialogHeaderContainer.appendChild(dialogHeaderText);
+
+  //Dialog para container//
+  const dialogParaContainer = createElement('div');
+  addClass(dialogParaContainer, 'dialog-para-container');
+  dialogDiv.appendChild(dialogParaContainer);
+  //Div to contain text in para container//
+  const paraTextContainer = createElement('div');
+  addClass(paraTextContainer, 'para-text-container');
+  dialogParaContainer.appendChild(paraTextContainer);
+  //Paragraph element//
+  const para = createElement('p');
+  para.textContent = 'All ships have been sunk!';
+  addClass(para, 'para-text');
+  paraTextContainer.appendChild(para);
+  //Div container new game button//
+  const newGamecontainer = createElement('div');
+  addClass(newGamecontainer, 'new-game');
+  dialogParaContainer.appendChild(newGamecontainer);
+  //New game button//
+  const newGameBtn = createElement('button');
+  newGameBtn.textContent = 'New Game';
+  newGamecontainer.appendChild(newGameBtn);
   //Container for boards & Ship buttons//
   const boardAndShipBtnContainer = createElement('div');
   addClass(boardAndShipBtnContainer, 'board-ship-container');
@@ -26,6 +64,16 @@ export function pageLayout() {
     '.board-ship-container',
     contentContainer
   );
+  //Game directions container//
+  const instructionsDiv = createElement('div');
+  addClass(instructionsDiv, 'instructions-container');
+  boardAndShipBtnContainer.appendChild(instructionsDiv);
+  //Instructions text//
+  const instructionsText = createElement('p');
+  instructionsText.innerHTML =
+    '<p>Select ship and direction to place ship on board</p> <br><p>Select "Start game" once all five ships have been placed</p><br>';
+
+  instructionsDiv.appendChild(instructionsText);
   //Ships container//
   const shipContainer = createElement('div');
   addClass(shipContainer, 'ship-container');
@@ -80,11 +128,6 @@ export function pageLayout() {
   //Computer board//
   const computerBoard = createElement('div');
   addClass(computerBoard, 'computer-board-container');
-  // appendIfNotExists(
-  //   computerBoard,
-  //   '.computer-board-container',
-  //   boardAndShipBtnContainer
-  // );
   // Start game button div container//
   const startGameContainer = createElement('div');
   addClass(startGameContainer, 'start-container');
@@ -102,9 +145,9 @@ export function pageLayout() {
   resetBtn.textContent = 'Reset';
   startGameContainer.appendChild(resetBtn);
   // //Function to create player board//
-  createDomGameBoard(playerBoard);
+  createDomGameBoard(playerBoard, 'player');
   //Function to create computer board//
-  createDomGameBoard(computerBoard);
+  createDomGameBoard(computerBoard, 'computer');
 
   return {
     playerBoard,
@@ -120,6 +163,11 @@ export function pageLayout() {
     randomBtn,
     resetBtn,
     boardAndShipBtnContainer,
+    dialog,
+    dialogHeaderText,
+    newGameBtn,
+    instructionsDiv,
+    shipContainer,
   };
 }
 
@@ -136,13 +184,14 @@ function createDomCoordsArr() {
 }
 
 //Function to create DOM gameboard//
-export function createDomGameBoard(board) {
+export function createDomGameBoard(board, owner) {
   const { boardCoordsArr } = createDomCoordsArr();
   let row;
   for (let i = 0; i < 100; i++) {
     row = createElement('div');
     addClass(row, 'row');
     row.setAttribute('id', boardCoordsArr[i]);
+    row.setAttribute('data-owner', owner);
     board.appendChild(row);
   }
   return { row };
