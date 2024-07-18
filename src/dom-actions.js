@@ -75,7 +75,7 @@ playerBoard.addEventListener('click', (e) => {
 
 playerBoard.addEventListener('mouseover', (e) => {
   const hoveredElement = e.target;
-  removeHoverClass(highlightedBoardsArr);
+  removeHoverClass(highlightedBoardsArr, 'hover');
   // Add the new hover classes
   if (highlightedButton) {
     highlightedBoardsArr = hoverOverDomBoards(
@@ -86,7 +86,7 @@ playerBoard.addEventListener('mouseover', (e) => {
 });
 
 playerBoard.addEventListener('mouseleave', (e) => {
-  removeHoverClass(highlightedBoardsArr);
+  removeHoverClass(highlightedBoardsArr, 'hover');
 });
 
 computerBoard.addEventListener('click', (e) => {
@@ -140,6 +140,19 @@ computerBoard.addEventListener('click', (e) => {
       dialog.showModal();
     }
   }
+});
+
+computerBoard.addEventListener('mouseover', (e) => {
+  const computerCells = document.querySelectorAll('[data-owner=computer]');
+  computerCells.forEach((cell) => {
+    cell.addEventListener('mouseover', (e) => {
+      cell.classList.add('target');
+    });
+
+    cell.addEventListener('mouseleave', (e) => {
+      cell.classList.remove('target');
+    });
+  });
 });
 
 carrierBtn.addEventListener('click', (e) => {
@@ -276,6 +289,7 @@ startGameBtn.addEventListener('click', (e) => {
 
     //Remove instructions div container//
     boardAndShipBtnContainer.removeChild(instructionsDiv);
+    startGameBtn.disabled = true;
   }
 });
 
@@ -318,6 +332,9 @@ function displayShip(btn, ship, coords, direction) {
       [x, y].toString()
     );
     if (playerBoardHasShiponCoords) {
+      //Test begins//
+
+      //Test ends above//
       btn.disabled = true;
       if (btn.classList.contains('highlight')) {
         btn.classList.remove('highlight');
@@ -376,11 +393,11 @@ function addHoverClass(arr) {
 }
 
 //Function to remove hover class
-function removeHoverClass(arr) {
+function removeHoverClass(arr, style) {
   arr.forEach((board) => {
     const row = document.getElementById(board);
     if (row) {
-      row.classList.remove('hover');
+      row.classList.remove(style);
     }
   });
 }

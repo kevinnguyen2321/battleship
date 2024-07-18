@@ -71,7 +71,7 @@ export function pageLayout() {
   //Instructions text//
   const instructionsText = createElement('p');
   instructionsText.innerHTML =
-    '<p>Select ship and direction to place ship on board</p> <br><p>Select "Start game" once all five ships have been placed</p><br>';
+    '<p>Select ship and direction to place ship on board</p> <br><p>Select "Start" once all five ships have been placed</p><br>';
 
   instructionsDiv.appendChild(instructionsText);
   //Ships container//
@@ -135,14 +135,17 @@ export function pageLayout() {
   //Random button//
   const randomBtn = createElement('button');
   randomBtn.textContent = 'Random';
+  addClass(randomBtn, 'random-btn');
   startGameContainer.appendChild(randomBtn);
   // Start game button//
   const startGameBtn = createElement('button');
-  startGameBtn.textContent = 'Start game';
+  startGameBtn.textContent = 'Start';
+  addClass(startGameBtn, 'start-btn');
   startGameContainer.appendChild(startGameBtn);
   // Reset button//
   const resetBtn = createElement('button');
   resetBtn.textContent = 'Reset';
+  addClass(resetBtn, 'reset-btn');
   startGameContainer.appendChild(resetBtn);
   // //Function to create player board//
   createDomGameBoard(playerBoard, 'player');

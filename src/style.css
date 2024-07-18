@@ -8,11 +8,40 @@
 body {
   margin: 0;
   min-height: 100vh;
+  background-image: url('./images/ocean.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+button {
+  display: inline-block;
+  outline: 0;
+  border: 0;
+  cursor: pointer;
+  background-color: white;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d3748;
+  border: 1px solid #cbd5e0;
+  line-height: 26px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  font-family: 'Army Rust';
+}
+
+button:hover {
+  transform: scale(1.2);
+  transition: transform 0.3s ease;
+}
+
+button:disabled {
+  color: darkgray;
+  background-color: darkgray;
 }
 
 .main-container {
   height: 100vh;
-  border: solid rgb(8, 2, 2);
   display: flex;
   flex-direction: column;
   justify-content: start;
@@ -21,22 +50,21 @@ body {
 
 .header-container {
   margin-top: 5px;
-  /* border: solid rgb(19, 117, 10); */
   width: 50%;
   height: 15%;
 }
 
 .header-text {
   text-align: center;
-  font-size: 5.5rem;
+  font-size: 6rem;
   font-family: 'Army Rust';
-  color: black
+  color: rgb(182, 169, 169);
+  font-weight: 100;
 }
 
 .content-container {
   display: flex;
   flex-direction: column;
-  border: solid pink;
   height: 100vh;
   width: 99%;
   margin-top: 25px;
@@ -44,23 +72,40 @@ body {
 }
 
 .instructions-container {
-  border: solid black;
   width: 15%;
   height: 85%;
 }
 
+.instructions-container p {
+  font-family: 'Army Rust';
+  font-size: 2.2rem;
+  color: rgb(182, 169, 169);
+}
+
+.instruc-text {
+  font-size: 69px;
+  font-family: 'Army Rust';
+}
+
 .ship-container {
+  padding: 10px;
   width: 300px;
   height: 400px;
-  border: solid black;
+  box-shadow: 0 0 0.5rem 0 rgb(202, 214, 224);
+  border-radius: 45px;
   margin-top: 45px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
 }
 
+.ship-container button {
+  width: 40%;
+  align-self: center;
+  font-size: 1.2rem;
+}
+
 .direction-container {
-  border: solid green;
   display: flex;
   justify-content: space-around;
   width: 99%;
@@ -70,7 +115,8 @@ body {
 .player-board-container,
 .computer-board-container {
   margin-top: 30px;
-  border: solid black;
+  border: solid 1px rgb(172, 167, 167);
+  border-radius: 5px;
   width: 500px;
   height: 500px;
   display: grid;
@@ -79,7 +125,8 @@ body {
 }
 
 .row {
-  border: solid 1.5px black;
+  border: solid 1px rgb(172, 167, 167);
+  border-radius: 5px;
   width: 100%;
   height: 100%;
 }
@@ -100,6 +147,12 @@ body {
   background-color: yellow;
 }
 
+.target {
+  background-image: url(./images/target.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 .random-highlight {
   background-color: green;
 }
@@ -110,7 +163,6 @@ button:disabled {
 }
 
 .board-ship-container {
-  border: solid green;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -118,7 +170,6 @@ button:disabled {
 }
 
 .start-container {
-  border: solid black;
   margin-top: 15px;
   width: 40%;
   height: 10%;
@@ -129,16 +180,40 @@ button:disabled {
 }
 
 .start-container button {
-  width: 5rem;
-  height: 2.2rem;
+  width: 6rem;
+  /* height: 2.2rem; */
 }
 
-.missed {
+.start-btn {
+  background-color: green;
+}
+
+.reset-btn {
+  background-color: red;
+}
+
+.random-btn {
   background-color: yellow;
 }
 
+.start-btn,
+.reset-btn,
+.random-btn {
+  font-size: 1.4rem;
+  color: black;
+}
+
+.missed {
+  background-image: url(./images/miss.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: #ccc;
+}
+
 .hit {
-  background-color: red;
+  background-image: url(./images/boom.png);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 #game-over {
@@ -150,21 +225,22 @@ button:disabled {
 }
 
 .dialog-div {
-  border: solid green;
   width: 100%;
   height: 100%;
+  font-family: 'Army Rust';
 }
 
 .dialog-header-container {
   width: 100%;
   height: 20%;
-  border: dotted blue;
   box-sizing: border-box;
 }
 
 .dialog-header-text,
 .para-text {
   text-align: center;
+  font-family: 'Army Rust';
+  font-size: 3rem;
 }
 
 .dialog-para-container {
@@ -173,7 +249,7 @@ button:disabled {
   justify-content: flex-start;
   width: 100%;
   height: 100%;
-  border: dotted red;
+
   box-sizing: border-box;
   overflow: hidden;
   gap: 15px;
@@ -182,14 +258,20 @@ button:disabled {
 .para-text-container {
   width: 100%;
   height: 50%;
-  border: solid purple;
 }
 
 .new-game {
   display: flex;
   margin-left: 20px;
   justify-content: center;
-  border: dotted green;
+  align-items: center;
   width: 80%;
   height: 15%;
+}
+
+.new-game button {
+  background-color: green;
+  color: black;
+  font-size: 1.4rem;
+  width: 8rem;
 }
